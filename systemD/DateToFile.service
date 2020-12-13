@@ -1,0 +1,6 @@
+[Unit]
+Description=This unit will write date to file
+[Service]
+ExecStart=/usr/bin/bash -c "date >> /tmp/date.txt"
+[Install]
+WantedBy=multi-user.target
