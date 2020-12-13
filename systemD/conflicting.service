@@ -1,0 +1,10 @@
+[Unit]
+Description=Conflicting unit
+Conflicts=DateToFile.service
+Before=DateToFile.service
+
+[Service]
+ExecStart=/usr/bin/bash -c "echo I am interrupting >> /tmp/date.txt"
+
+[Install]
+WantedBy=multi-user.target
