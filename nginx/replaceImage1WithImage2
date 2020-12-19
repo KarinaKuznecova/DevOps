@@ -1,0 +1,9 @@
+server {
+  listen 80;
+  server_name _;
+
+  location / {
+    proxy_pass https://victim;
+    sub_filter 'https://victim/image1.png' 'https://funnyimages/image2.png';
+  }
+}
