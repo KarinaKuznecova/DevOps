@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+if [[ -z $1 ]]; then
+  backup_dir="${HOME}/app/data"
+else
+  backup_dir="${HOME}/app/$1"
+fi
+mkdir -p ${backup_dir}
+cd ${backup_dir}
