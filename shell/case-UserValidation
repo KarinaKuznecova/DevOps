@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+case "${USER}" in
+  "admin")
+    echo "User validation passed"
+    ;;
+  "root")
+    echo "Never run as root!"
+    exit 1
+    ;;
+  *)
+    echo "You must run this script as admin"
+    exit 2
+    ;;
+esac
