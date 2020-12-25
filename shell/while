@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+file="data.csv-$(date +%H%M%S)"
+URL=”http://13.53.146.18/data”
+
+sha_count=0
+while [[ sha_count -le 20 ]]; do
+    echo "Downloading ${sha_count} sha256 file"
+    sha_file="${sha_count}.csv.gz.sha256"
+    curl -s -L -o ${sha_file} ${URL}/${sha_file}
+    echo "Download ${sha_file} file completed!"
+    ((sha_count++))
+done
