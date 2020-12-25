@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+if [[ ${USER} == "root" ]]; then
+   echo "NEVER RUN THIS SCRIPT AS ROOT!"
+   exit 1
+elif [[${USER} != "admin" ]]; then
+   echo "Please run this script as admin"
+   exit 2
+else
+   echo "Validation passed"
+fi
