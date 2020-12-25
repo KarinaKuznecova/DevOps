@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+file="data.csv-$(date +%H%M%S)"
+URL=”http://13.53.146.18/data”
+
+for i in {0..20}; do
+    echo "Downloading ${i} data file"
+    file="${i}.csv.gz"
+    curl -s -L -o ${file} ${URL}/${file}
+    echo "Download ${i} data file completed!"
+done
