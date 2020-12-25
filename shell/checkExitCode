@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+file="data.csv-$(date +%H%M%S)"
+URL=”http://13.53.146.18/data”
+
+echod () {
+  date="$(date +"%Y-%m-%d %H:%M:%S")"
+  echo "${date} ${1}"
+}
+
+curl -s -L -o ${file} ${URL}/${file}
+if [[ $? -eq 0 ]]; then
+  echod "Download ${i} data file completed!"
+else
+  echod "Download ${i} data file failed!"
+fi
