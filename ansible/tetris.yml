@@ -1,0 +1,65 @@
+---
+- name: Tetris app setup
+  hosts: local
+  vars:
+   aws_region: eu-north-1
+
+  pre_tasks:
+  - name: Install apt deps
+    apt:
+      name: python3-pip
+    become: yes
+  - name: Install python deps
+    pip:
+      name: boto3
+
+  tasks:
+  - name: Create tetris app alb target group
+    elb_target_group:
+      name: tetrisapp-tg
+      region: "{{ aws_region }}"
+      protocol: http
+      port: 80
+      state: present
+      vpc_id: vpc-4a03a923
+    register: tetris_tg_out
+  - name: Create tetris app alb
+    elb_application_lb:
+      name: tetrisapp-alb
+      region: "{{ aws_region }}"
+      subnets:
+        - subnet-94ee1ad9
+        - subnet-ac4a80d7
+        - subnet-cd64cfa4
+      security_groups:
+        - sg-0570663f85f96ce58
+      listeners:
+        - Protocol: HTTP
+          Port: 80
+          DefaultActions:
+            - Type: forward
+              TargetGroupName: "{{ tetris_tg_out.target_group_name }}"
+  - name: Create tetris app launch template
+    ec2_launch_template:
+      name: tetrisapp_lt
+      region: "{{ aws_region }}"
+      image_id: ami-085522a024df5ed8e
+      key_name: javaguru
+      instance_type: t3.micro
+      security_group_ids:
+        - sg-0570663f85f96ce58
+      user_data: "{{ lookup('file', './data/cloud_init') | string | b64encode }}"
+  - name: Create tetris app autoscaling group
+    ec2_asg:
+      name: tetrisapp_asg
+      replace_all_instances: yes
+      region: "{{ aws_region }}"
+      launch_template:
+        launch_template_name: tetrisapp_lt
+      min_size: 0
+      max_size: 2
+      target_group_arns:
+        - "{{ tetris_tg_out.target_group_arn }}"
+      desired_capacity: 2
+      tags:
+        - Name: tetrisapp
