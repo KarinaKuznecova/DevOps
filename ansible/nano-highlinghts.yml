@@ -1,0 +1,10 @@
+- name: General setup
+  hosts: local
+
+  tasks:
+  - name: Install nano yaml highlighting
+    get_url:
+      url: https://ej.uz/nano-yaml-nanorc
+      dest: /usr/share/nano/yaml.nanorc
+      mode: '644'
+    become: yes	
