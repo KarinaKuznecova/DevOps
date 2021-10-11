@@ -1,0 +1,22 @@
+---
+- name: Monitoring
+  hosts: local
+  vars:
+    prometheus_targets:
+      node:
+      - targets:
+        - localhost:9100
+    grafana_security:
+      admin_user: admin
+      admin_password: admin123123
+
+  pre_tasks:
+  - name: Install deps
+    apt:
+      name: python-jmespath
+    become: yes
+
+  roles:
+    - cloudalchemy.prometheus
+    - cloudalchemy.node-exporter
+    - cloudalchemy.grafana
